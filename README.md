@@ -1,5 +1,4 @@
-<!-- 🔥 Banner goes here -->
-<!-- <img src="banner.png" alt="Cookie Editor Banner" /> -->
+<img width="1584" height="396" alt="Cookie Editor Banner" src="https://github.com/user-attachments/assets/3bced8b9-35cf-4270-a1f4-bca0e0e6185b" />
 
 # Cookie Editor
 
