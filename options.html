@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Cookie Editor - Full View</title>
+  <link rel="stylesheet" href="options-styles.css">
+</head>
+<body>
+  <div class="options-container">
+    <div class="options-header">
+      <div class="options-title">
+        <img src="icon.png" alt="icon" class="cookie-icon">
+        <div>
+          <div class="header">
+            Cookie Editor
+          </div>
+          <a class="repo-link" href="https://github.com/vedant-joshi-og/cookie-editor">
+            https://github.com/vedant-joshi-og/cookie-editor
+          </a>
+        </div>
+        </div>
+      <div class="header-actions">
+        <button id="refreshCookies" class="btn btn-secondary">Refresh</button>
+        <button id="clearAllCookies" class="btn btn-danger">Clear All</button>
+      </div>
+    </div>
+    
+    <div class="filter-section">
+      <input type="text" id="siteFilter" class="filter-input" placeholder="Filter by site (e.g., google.com)">
+      <button id="applyFilter" class="btn btn-primary">Filter</button>
+      <button id="clearFilter" class="btn btn-secondary">Clear</button>
+    </div>
+    
+    <div id="cookieStats" class="cookie-stats"></div>
+    
+    <div id="loading" class="loading-state">Loading all cookies...</div>
+    
+    <div id="noCookies" class="empty-state" style="display: none;">
+      No cookies found
+    </div>
+    
+    <div id="cookieContainer" class="main-content" style="display: none;">
+      <div class="content-layout">
+        <div class="cookie-list-panel">
+          <div id="cookieList" class="cookie-domains"></div>
+        </div>
+        
+        <div class="cookie-editor-panel">
+          <div id="cookieEditor" class="cookie-editor" style="display: none;">
+            <div class="editor-header">Edit Cookie</div>
+            <div class="editor-form">
+              <div class="form-row">
+                <label class="form-label">Name</label>
+                <input type="text" id="editName" class="form-input" readonly>
+              </div>
+              
+              <div class="form-row">
+                <label class="form-label">Store ID</label>
+                <input type="text" id="editStoreId" class="form-input" readonly>
+              </div>
+              
+              <div class="form-row">
+                <label class="form-label">Partition Key</label>
+                <input type="text" id="editPartitionKey" class="form-input" readonly>
+              </div>
+              
+              <div class="form-row">
+                <label class="form-label">Value</label>
+                <textarea id="editValue" class="form-textarea"></textarea>
+              </div>
+              
+              <div class="form-row">
+                <label class="form-label">Expires</label>
+                <input type="datetime-local" id="editExpires" class="form-input">
+              </div>
+              
+              <div class="form-row">
+                <label class="form-label">Same Site</label>
+                <select id="editSameSite" class="form-input">
+                  <option value="unspecified">Unspecified</option>
+                  <option value="no_restriction">No Restriction</option>
+                  <option value="lax">Lax</option>
+                  <option value="strict">Strict</option>
+                </select>
+              </div>
+              
+              <div class="form-actions">
+                <button id="saveEdit" class="btn btn-primary">Update</button>
+                <button id="deleteEdit" class="btn btn-danger">Delete</button>
+              </div>
+            </div>
+          </div>
+          
+          <div id="noSelection" class="no-selection">
+            <div class="no-selection-text">Select a cookie to edit</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="message" class="message"></div>
+  </div>
+  
+  <script src="options-new.js"></script>
+</body>
+</html>

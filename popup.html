@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="popup-styles.css">
+</head>
+<body>
+  <div class="popup-container">
+    <div class="popup-header">
+      <div class="popup-title">
+        <img src="icon.png" alt="icon" class="cookie-icon">
+        Cookie Editor
+      </div>
+      <button id="openFullPage" class="btn btn-secondary">Full View</button>
+    </div>
+    
+    <div id="currentSite" class="current-site"></div>
+    
+    <div id="loading" class="loading-state">Loading cookies...</div>
+    
+    <div id="noCookies" class="empty-state" style="display: none;">
+      No cookies found for this site
+    </div>
+    
+    <div class="popup-content" style="display: none;" id="mainContent">
+      <div class="cookie-selector">
+        <div id="cookieList" class="cookie-list"></div>
+      </div>
+      
+      <div id="cookieEditor" class="cookie-editor" style="display: none;">
+        <div class="editor-header">
+          Edit Cookie
+          <button class="close-btn" id="closeEditor">×</button>
+        </div>
+        <div class="editor-form">
+          <div class="form-row full-width">
+            <label class="form-label">Name</label>
+            <input type="text" id="cookieName" class="form-input" readonly>
+          </div>
+          
+          <div class="form-row-group">
+            <div class="form-row half-width">
+              <label class="form-label">Store ID</label>
+              <input type="text" id="storeId" class="form-input" readonly>
+            </div>
+            <div class="form-row half-width">
+              <label class="form-label">Partition Key</label>
+              <input type="text" id="partitionKey" class="form-input" readonly>
+            </div>
+          </div>
+          
+          <div class="form-row full-width">
+            <label class="form-label">Value</label>
+            <textarea id="cookieValue" class="form-textarea"></textarea>
+          </div>
+          
+          <div class="form-actions">
+            <button id="updateCookie" class="btn btn-primary">Update</button>
+            <button id="resetCookie" class="btn btn-secondary">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="message" class="message"></div>
+  </div>
+  
+  <script src="popup-new.js"></script>
+</body>
+</html>
