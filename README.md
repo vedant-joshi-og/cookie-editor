@@ -9,6 +9,10 @@ Built for devs, testers, and curious internet goblins.
 
 ---
 
+[Firefox](https://addons.mozilla.org/en-US/firefox/addon/cookie-editor-popup/)
+
+---
+
 ## What it does
 
 - View all cookies for current site  
