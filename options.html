@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <title>Cookie Editor - Full View</title>
-  <link rel="stylesheet" href="options-styles.css">
+  <link rel="stylesheet" href="options.css">
 </head>
+
 <body>
   <div class="options-container">
     <div class="options-header">
@@ -14,37 +16,61 @@
           <div class="header">
             Cookie Editor
           </div>
-          <a class="repo-link" href="https://github.com/vedant-joshi-og/cookie-editor">
-            https://github.com/vedant-joshi-og/cookie-editor
+          <a class="repo-link" href="https://github.com/vedant-joshi-og/cookie-editor" target="_blank">
+            https://github.com/vedant-joshi-og/cookie-editor [<span style="font-size: large;">★</span> <span id="githubStars">Loading...</span>]
           </a>
         </div>
-        </div>
+      </div>
       <div class="header-actions">
         <button id="refreshCookies" class="btn btn-secondary">Refresh</button>
         <button id="clearAllCookies" class="btn btn-danger">Clear All</button>
       </div>
     </div>
-    
+
     <div class="filter-section">
-      <input type="text" id="siteFilter" class="filter-input" placeholder="Filter by site (e.g., google.com)">
-      <button id="applyFilter" class="btn btn-primary">Filter</button>
-      <button id="clearFilter" class="btn btn-secondary">Clear</button>
+      <div>
+        <input type="text" id="siteFilter" class="filter-input" placeholder="Search by name, domain, or value...">
+        <button id="applyFilter" class="btn btn-primary">Search</button>
+        <button id="clearFilter" class="btn btn-secondary">Clear</button>
+      </div>
+
+      <div class="filter-toggles">
+        <label class="toggle-label">
+          <input type="checkbox" id="filterSecure"> Secure only
+        </label>
+        <label class="toggle-label">
+          <input type="checkbox" id="filterHttpOnly"> HttpOnly only
+        </label>
+        <label class="toggle-label">
+          <input type="checkbox" id="filterSession"> Session only
+        </label>
+        <label class="toggle-label">
+          <input type="checkbox" id="filterExpired"> Expired only
+        </label>
+      </div>
     </div>
-    
+
+    <div class="import-export-section">
+      <button id="exportJSON" class="btn btn-secondary">Export JSON</button>
+      <button id="exportNetscape" class="btn btn-secondary">Export Netscape</button>
+      <button id="importCookies" class="btn btn-secondary">Import Cookies</button>
+      <input type="file" id="fileInput" accept=".json,.txt" style="display: none;">
+    </div>
+
     <div id="cookieStats" class="cookie-stats"></div>
-    
+
     <div id="loading" class="loading-state">Loading all cookies...</div>
-    
+
     <div id="noCookies" class="empty-state" style="display: none;">
       No cookies found
     </div>
-    
+
     <div id="cookieContainer" class="main-content" style="display: none;">
       <div class="content-layout">
         <div class="cookie-list-panel">
           <div id="cookieList" class="cookie-domains"></div>
         </div>
-        
+
         <div class="cookie-editor-panel">
           <div id="cookieEditor" class="cookie-editor" style="display: none;">
             <div class="editor-header">Edit Cookie</div>
@@ -53,27 +79,27 @@
                 <label class="form-label">Name</label>
                 <input type="text" id="editName" class="form-input" readonly>
               </div>
-              
+
               <div class="form-row">
                 <label class="form-label">Store ID</label>
                 <input type="text" id="editStoreId" class="form-input" readonly>
               </div>
-              
+
               <div class="form-row">
                 <label class="form-label">Partition Key</label>
                 <input type="text" id="editPartitionKey" class="form-input" readonly>
               </div>
-              
+
               <div class="form-row">
                 <label class="form-label">Value</label>
                 <textarea id="editValue" class="form-textarea"></textarea>
               </div>
-              
+
               <div class="form-row">
                 <label class="form-label">Expires</label>
                 <input type="datetime-local" id="editExpires" class="form-input">
               </div>
-              
+
               <div class="form-row">
                 <label class="form-label">Same Site</label>
                 <select id="editSameSite" class="form-input">
@@ -83,24 +109,25 @@
                   <option value="strict">Strict</option>
                 </select>
               </div>
-              
+
               <div class="form-actions">
                 <button id="saveEdit" class="btn btn-primary">Update</button>
                 <button id="deleteEdit" class="btn btn-danger">Delete</button>
               </div>
             </div>
           </div>
-          
+
           <div id="noSelection" class="no-selection">
             <div class="no-selection-text">Select a cookie to edit</div>
           </div>
         </div>
       </div>
     </div>
-    
+
     <div id="message" class="message"></div>
   </div>
-  
-  <script src="options-new.js"></script>
+
+  <script src="options.js"></script>
 </body>
+
 </html>

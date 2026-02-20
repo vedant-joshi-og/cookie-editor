@@ -14,6 +14,9 @@ function setupEventListeners() {
   
   document.getElementById('updateCookie').addEventListener('click', updateCookie);
   document.getElementById('resetCookie').addEventListener('click', resetCookie);
+  document.getElementById('closeEditor').addEventListener('click', () => {
+    document.getElementById('cookieEditor').style.display = 'none';
+  });
 }
 
 async function loadCurrentSiteCookies() {
@@ -22,7 +25,7 @@ async function loadCurrentSiteCookies() {
     const url = new URL(tab.url);
     currentDomain = url.hostname;
     
-    document.getElementById('currentSite').textContent = `Cookies for: ${currentDomain}`;
+    document.getElementById('currentSite').textContent = `${currentDomain}`;
     
     const cookies = await chrome.cookies.getAll({ domain: currentDomain });
     currentCookies = cookies;
@@ -32,6 +35,7 @@ async function loadCurrentSiteCookies() {
     if (cookies.length === 0) {
       document.getElementById('noCookies').style.display = 'block';
     } else {
+      document.getElementById('mainContent').style.display = 'block';
       displayCookieList(cookies);
     }
   } catch (error) {
@@ -49,34 +53,19 @@ function displayCookieList(cookies) {
     cookieItem.className = 'cookie-item';
     cookieItem.innerHTML = `
       <div class="cookie-name">${cookie.name}</div>
-      <div class="cookie-details">
-        <div><strong>Domain:</strong> ${cookie.domain}</div>
-        <div><strong>Path:</strong> ${cookie.path}</div>
-        <div><strong>Secure:</strong> ${cookie.secure ? 'Yes' : 'No'}</div>
-        <div><strong>HttpOnly:</strong> ${cookie.httpOnly ? 'Yes' : 'No'}</div>
-      </div>
-      <div class="cookie-actions">
-        <button class="btn btn-primary btn-edit" data-cookie-name="${cookie.name}">Edit</button>
-        <button class="btn btn-danger btn-delete" data-cookie-name="${cookie.name}">Delete</button>
-      </div>
     `;
     
+    cookieItem.addEventListener('click', () => {
+      document.querySelectorAll('.cookie-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      
+      cookieItem.classList.add('active');
+      
+      editCookie(cookie.name);
+    });
+    
     listContainer.appendChild(cookieItem);
-  });
-  
-  // Add event listeners for edit and delete buttons
-  document.querySelectorAll('.btn-edit').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const cookieName = e.target.dataset.cookieName;
-      editCookie(cookieName);
-    });
-  });
-  
-  document.querySelectorAll('.btn-delete').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const cookieName = e.target.dataset.cookieName;
-      deleteCookie(cookieName);
-    });
   });
 }
 
@@ -101,22 +90,41 @@ async function updateCookie() {
   try {
     const newValue = document.getElementById('cookieValue').value;
     
-    await chrome.cookies.set({
-      url: `http${selectedCookie.secure ? 's' : ''}://${selectedCookie.domain}${selectedCookie.path}`,
+    if (newValue.includes('\n') || newValue.includes('\r')) {
+      throw new Error('Cookie value cannot contain line breaks');
+    }
+    
+    const cleanDomain = selectedCookie.domain.startsWith('.')
+      ? selectedCookie.domain.substring(1)
+      : selectedCookie.domain;
+    
+    const url = `http${selectedCookie.secure ? 's' : ''}://${cleanDomain}${selectedCookie.path}`;
+    
+    await chrome.cookies.remove({
+      url: url,
+      name: selectedCookie.name
+    });
+    
+    const cookieDetails = {
+      url: url,
       name: selectedCookie.name,
       value: newValue,
       domain: selectedCookie.domain,
       path: selectedCookie.path,
       secure: selectedCookie.secure,
-      httpOnly: selectedCookie.httpOnly,
       expirationDate: selectedCookie.expirationDate
-    });
+    };
+    
+    if (selectedCookie.partitionKey) {
+      cookieDetails.partitionKey = selectedCookie.partitionKey;
+    }
+    
+    await chrome.cookies.set(cookieDetails);
     
     showMessage('Cookie updated successfully!', 'success');
     await loadCurrentSiteCookies();
-    document.getElementById('cookieEditor').style.display = 'none';
   } catch (error) {
-    showMessage('Error updating cookie: ' + error.message, 'error');
+    showMessage(`Error updating cookie: ${error.message}`, 'error');
   }
 }
 
@@ -127,27 +135,9 @@ function resetCookie() {
   showMessage('Cookie value reset', 'success');
 }
 
-async function deleteCookie(cookieName) {
-  const cookie = currentCookies.find(c => c.name === cookieName);
-  if (!cookie) return;
-  
-  try {
-    await chrome.cookies.remove({
-      url: `http${cookie.secure ? 's' : ''}://${cookie.domain}${cookie.path}`,
-      name: cookie.name
-    });
-    
-    showMessage('Cookie deleted successfully!', 'success');
-    await loadCurrentSiteCookies();
-    document.getElementById('cookieEditor').style.display = 'none';
-  } catch (error) {
-    showMessage('Error deleting cookie: ' + error.message, 'error');
-  }
-}
-
 function showMessage(text, type) {
   const messageDiv = document.getElementById('message');
-  messageDiv.className = type === 'error' ? 'error-message' : 'success-message';
+  messageDiv.className = `message ${type}`;
   messageDiv.textContent = text;
   messageDiv.style.display = 'block';
   
